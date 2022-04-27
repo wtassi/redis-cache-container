@@ -1,5 +1,4 @@
 #!/bin/bash
-#escape=\
 # COPIED/MODIFIED from the redis server gen-certs util
 # https://github.com/redis/redis/blob/cc0091f0f9fe321948c544911b3ea71837cf86e3/utils/gen-test-certs.sh
 
@@ -11,7 +10,8 @@
 #   tls/server.{crt,key}      A certificate restricted for SSL server usage.
 #   tls/redis.dh              DH Params file.
 
-tlsPath="./src/docker/redis/tls"
+# Altere aqui o path desejado
+tlsPath="./tls"
 mkdir -p "$tlsPath"
 
 generate_cert() {
