@@ -1,0 +1,23 @@
+version: '3.9'
+
+volumes:
+  redis:
+    driver: local
+
+services:
+  redis:
+    image: redis:6.2.0
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+      REDIS_TLS_ENABLED: 'yes'
+      REDIS_TLS_PORT: '6380'
+      REDIS_TLS_CERT_FILE: '/usr/local/etc/redis/redis.crt'
+      REDIS_TLS_KEY_FILE: '/usr/local/etc/redis/redis.key'
+      REDIS_TLS_CA_FILE: '/usr/local/etc/redis/ca.crt'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--save 20 1 --loglevel notice"]
+    volumes:
+      - "./redis.conf:/usr/local/etc/redis/redis.conf"
+      - "./tls:/usr/local/etc/redis"
+    ports:
+      - 6380:6380
