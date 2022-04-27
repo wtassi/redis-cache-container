@@ -9,6 +9,12 @@ Link download Docker-Desktop: https://www.docker.com/products/docker-desktop/
 - [Para MAC com chip Intel](https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module)
 - [Para MAC com chip Apple](https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module)
 
+## Senha do Redis
+
+No arquivo "**redis.conf**" esta configurado a senha para altenticação **`redisTLS2022@@`**, altere no arquivo conforme desejado, se quiser tirar altenticação pasta comentar ou remover a linha "requirepass...".
+
+## Certificados TLS
+
 Por default, o path utilizado para gerar os certificados é: `./tls`, caso queira modificar, basta alterar nos arquivos ".ps1" ou ".sh".
 
 Para buildar e executar o projeto, siga as etapas:
