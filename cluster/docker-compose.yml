@@ -1,0 +1,107 @@
+version: '3.9'
+
+volumes:
+  redis:
+    driver: local
+
+services:
+  redis0:
+    image: redis-cache:local
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--save 20 1 --loglevel notice"]
+    volumes:
+      - "./redis0.conf:/usr/local/etc/redis/redis.conf"
+      - "../tls:/usr/local/etc/redis"
+    ports:
+      - 6380:6380
+    network_mode: host
+
+  redis1:
+    image: redis-cache:local
+    restart: always
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--save 20 1 --loglevel notice"]
+    volumes:
+      - "./redis1.conf:/usr/local/etc/redis/redis.conf"
+      - "../tls:/usr/local/etc/redis"
+    ports:
+      - 7380:7380
+    depends_on:
+      - redis0
+
+  redis2:
+    image: redis-cache:local
+    restart: always
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--save 20 1 --loglevel notice"]
+    volumes:
+      - "./redis2.conf:/usr/local/etc/redis/redis.conf"
+      - "../tls:/usr/local/etc/redis"
+    ports:
+      - 7381:7381
+    depends_on:
+      - redis1
+    network_mode: host
+
+  redis3:
+    image: redis-cache:local
+    restart: always
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--save 20 1 --loglevel notice"]
+    volumes:
+      - "./redis3.conf:/usr/local/etc/redis/redis.conf"
+      - "../tls:/usr/local/etc/redis"
+    ports:
+      - 7382:7382
+    depends_on:
+      - redis2
+    network_mode: host
+
+  redis4:
+    image: redis-cache:local
+    restart: always
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--save 20 1 --loglevel notice"]
+    volumes:
+      - "./redis4.conf:/usr/local/etc/redis/redis.conf"
+      - "../tls:/usr/local/etc/redis"
+    ports:
+      - 7383:7383
+    depends_on:
+      - redis3
+    network_mode: host
+
+  redis5:
+    image: redis-cache:local
+    restart: always
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--save 20 1 --loglevel notice"]
+    volumes:
+      - "./redis5.conf:/usr/local/etc/redis/redis.conf"
+      - "../tls:/usr/local/etc/redis"
+    ports:
+      - 7384:7384
+    depends_on:
+      - redis4
+    network_mode: host
+
+  redis-cli:
+    image: redis:6.2
+    command: redis-cli --no-auth-warning --cluster-yes --cluster create 127.0.0.1:6380 127.0.0.1:7380 127.0.0.1:7381 127.0.0.1:7382 127.0.0.1:7383 127.0.0.1:7384 --cluster-replicas 1 --tls --cert /usr/local/etc/redis/redis.crt --key /usr/local/etc/redis/redis.key --cacert /usr/local/etc/redis/ca.crt -a redisTLS2022@@
+    volumes:
+      - "../tls:/usr/local/etc/redis"
+    depends_on:
+      - redis0
+      - redis1
+      - redis2
+      - redis3
+      - redis4
+      - redis5
+    network_mode: host
+
+  redis-health:
+    image: redis-local:6.2
+    command: redis-cli --cluster check 127.0.0.1:6380 -a redisTLS2022@@ --cert /usr/local/etc/redis/redis.crt --key /usr/local/etc/redis/redis.key --cacert /usr/local/etc/redis/ca.crt --tls cluster nodes     
+    volumes:
+      - "../tls:/usr/local/etc/redis"
+    depends_on:
+      - redis-cli
+    network_mode: host
