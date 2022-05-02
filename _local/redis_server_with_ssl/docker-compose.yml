@@ -1,0 +1,57 @@
+version: '3'
+
+volumes:
+  redis:
+    driver: local
+
+networks:
+  redis:
+    external: true
+    internal: true
+    driver: bridge
+
+services:
+  redis-ssl:
+    image: redis:6.2.0
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+      REDIS_PASSWORD: "redisTLS2022@@"
+      REDIS_TLS_ENABLED: "yes"
+      REDIS_TLS_PORT: "6380"
+      REDIS_TLS_CERT_FILE: "/usr/local/etc/redis/tls/redis.crt"
+      REDIS_TLS_KEY_FILE: "/usr/local/etc/redis/tls/redis.key"
+      REDIS_TLS_CA_FILE: "/usr/local/etc/redis/tls/ca.crt"
+    command: ["sh", "-c", "/usr/local/share/scripts/entrypoint-redis-server.sh"]
+    volumes:
+      - "./redis.conf:/usr/local/etc/redis/redis.conf"
+      - "../../scripts:/usr/local/share/scripts"
+      - "../../_tls:/usr/local/etc/redis/tls"
+      - "../../_data:/data"
+    ports:
+      - "6380:6380"
+
+  redis-ui:
+    # https://github.com/patrikx3/redis-ui
+    image: patrikx3/p3x-redis-ui:latest
+    restart: always
+    environment:
+      P3XRS_PORT: "8000"
+      REDIS_URL: "redis-ssl"
+      REDIS_PORT: "6380"
+      REDIS_PASSWORD: "redisTLS2022@@"
+      TLS_CRT: "/usr/local/etc/redis/tls/redis.crt"
+      TLS_KEY: "/usr/local/etc/redis/tls/redis.key"
+      TLS_CA: "/usr/local/etc/redis/tls/ca.crt"
+    command: ["sh", "-c", "/bin/bash /usr/local/share/scripts/entrypoint-redis-server-healthcheck.sh && sh -c /usr/local/share/scripts/entrypoint-redis-ui.sh"]
+    volumes:
+      - "../../scripts:/usr/local/share/scripts"
+      - "../../_settings:/settings"
+      - "../../_tls:/usr/local/etc/redis/tls"
+    ports:
+      - 90:8000
+    links:
+      - redis-ssl
+    depends_on:
+      redis-ssl:
+        condition: service_started
