@@ -1,6 +1,7 @@
-# Redis-Cache-Docker
+# <div><img src="https://redis.io/images/redis-cube.svg"  style="width:5%"/> Redis-Cache-Docker </div>
 
-Redis Docker com TLS
+https://redis.io/
+
 > Nota: Necessário ter o Docker e Docker-compose configurado na maquina.
 
 Link download Docker-Desktop: https://www.docker.com/products/docker-desktop/
@@ -14,7 +15,7 @@ Link download Docker-Desktop: https://www.docker.com/products/docker-desktop/
 No arquivo "**redis.conf**" de cada tipo, possui o campo de configuração da senha de autenticação, o valor configurado por default é: **`redisTLS2022@@`**, altere no arquivo conforme desejado, se quiser tirar altenticação pasta comentar ou remover a linha "requirepass...".
 
 ## **_Redis com SSL_**
-Para exeuctar o server do Redis com SSL, primeiro acesse o diretório "**`_local/redis_server_with_ssl`**" e em seguida execute o comando do docker-compose up
+Para exeuctar o server do Redis com SSL, primeiro acesse o diretório "**`_local/redis_server_with_ssl`**" e em seguida execute o comando do **`docker-compose up`**.
 
 > Para Windows:
 ```powershell
@@ -41,11 +42,50 @@ Para encerrar as aplicações:
 
 ```
 
-### Outputs
+**Outputs**
 
-|      App     |    Host   |  Porta |      Credenciais      |
-|--------------|-----------|--------|-----------------------|
-| Redis Server | 127.0.0.1 |  6380  | Senha: redisTLS2022@@ |
-| Redis UI     | 127.0.0.1 |   90   |  ---                  |
+|      App     |    Host   |  Porta |  SSL |      Credenciais      |
+|--------------|-----------|--------|------|-----------------------|
+| Redis Server | 127.0.0.1 |  6380  | yes  | Senha: redisTLS2022@@ |
+| Redis UI     | 127.0.0.1 |   90   | ---  |                       |
 
+----------------
+
+## **_Redis sem SSL_**
+Para exeuctar o server do Redis tradicional, sem segurança SSL, primeiro acesse o diretório "**`_local/redis_server_simple`**" e em seguida execute o comando do **`docker-compose up`**.
+
+> Para Windows:
+```powershell
+  cd .\_local\redis_server_simple
+```
+> Para Linux:
+```shell
+  cd ./_local/redis_server_simple
+```
+
+Em seguida inicie o container do Redis
+
+```
+  docker-compose up -d
+```
+
+Para encerrar as aplicações:
+```
+  ctrl+c
+
+  # ou
+
+  docker-compose down
+
+```
+
+**Outputs**
+
+|      App     |    Host   |  Porta |  SSL |      Credenciais      |
+|--------------|-----------|--------|------|-----------------------|
+| Redis Server | 127.0.0.1 |  6379  | no   | Senha: redisTLS2022@@ |
+| Redis UI     | 127.0.0.1 |   90   | ---  |                       |
+
+
+---------------
 
