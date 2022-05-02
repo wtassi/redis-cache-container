@@ -22,7 +22,7 @@ Para exeuctar o server do Redis com SSL, primeiro acesse o diretório "**`_local
 ```
 > Para Linux:
 ```shell
-  sh ./_local/redis_server_with_ssl
+  cd ./_local/redis_server_with_ssl
 ```
 
 Em seguida inicie o container do Redis
