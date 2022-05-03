@@ -6,7 +6,6 @@ volumes:
 
 networks:
   redis:
-    external: true
     internal: true
     driver: bridge
 
@@ -15,7 +14,7 @@ services:
     image: redis:6.2.0
     restart: always
     environment:
-      ALLOW_EMPTY_PASSWORD: "yes"
+      ALLOW_EMPTY_PASSWORD: "no"
       REDIS_PASSWORD: "redisTLS2022@@"
       REDIS_TLS_ENABLED: "yes"
       REDIS_TLS_PORT: "6380"

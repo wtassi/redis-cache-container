@@ -6,7 +6,6 @@ volumes:
 
 networks:
   redis:
-    external: true
     internal: true
     driver: bridge
 
